@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Ascanio{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+        {{ encore_entry_link_tags('app') }}
+        <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.min.css') }}">
+        {% block stylesheets %}
+            {# ajouts éventuels qui pourront être écrasés #}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="container-fluid p-0">
+            <div class="ui">
+                <nav class="navbar app">Ascanio</nav>
+                <nav class="navbar board">Trello</nav>
+
+
+
+            {% block body %}
+            {# Cotenu propre à chaque page #}
+            {% endblock %}
+
+
+
+            <script src="{{ asset('assets/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+            {{ encore_entry_script_tags('app') }}
+            {% block javascripts %}
+                {# ajouts éventuels qui pourront être écrasés #}      
+            {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

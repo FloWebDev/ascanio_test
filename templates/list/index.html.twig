@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ascanio - Trello{% endblock %}
+
+{% block body %}
+<div class="lists">
+    <div class="list">
+        <header></header>
+        <ul>
+            <li data-toggle="modal" data-target="#task1"><b>Test</b><br>Lorem ipsum dolor sit amet</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lobortis enim sit amet</li>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lobortis enim sit amet metus laoreet, ut condimentum</li>
+        </ul>
+        <footer>Ajoutez une tâche</footer>
+    </div>
+</div>
+
+{% include 'task/_modal.html.twig' with {id: 'task1'} %}
+{% endblock %}
