@@ -3,18 +3,37 @@
 {% block title %}Ascanio - Trello{% endblock %}
 
 {% block body %}
-<div class="lists">
+<div class="lists mt-3">
+    {% for liste in listes %}
     <div class="list">
-        <header></header>
+        <header>{{ liste.name|capitalize }}</header>
         <ul>
-            <li data-toggle="modal" data-target="#task1"><b>Test</b><br>Lorem ipsum dolor sit amet</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lobortis enim sit amet</li>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lobortis enim sit amet metus laoreet, ut condimentum</li>
+            {% for task in liste.tasks %}
+            <li>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>{{ task.name }}</b></h5>
+                        <h6 class="card-subtitle mb-2 text-{{ task.priority.color }}">{{ task.priority.name|capitalize }} - <span class="badge badge-pill badge-{{ task.priority.color }}">{{ task.zorder }}</span></h6>
+                        <p class="card-text">{{ task.content }}</p>
+                        <button type="button" class="btn btn-primary text-dark p-0 px-1 mr-2" data-toggle="modal" data-target="#task{{ task.id }}">Modifier</button>
+                        <a type="button"><i class="fas fa-trash text-danger"></i></a>
+                    </div>
+                </div>
+            </li>
+            {% else %}
+            <li>Aucune tâche créée.</li>
+            {% endfor %}
         </ul>
-        <footer>Ajoutez une tâche</footer>
+        <footer><i class="fas fa-plus-circle"></i> Ajouter</footer>
     </div>
+    {% else %}
+        <p>Aucune liste créée.</p>
+    {% endfor %}
 </div>
 
-{% include 'task/_modal.html.twig' with {id: 'task1'} %}
+{% for id, form in forms %}
+    {% include 'list/_modal.html.twig' with {form: form, id: id} %}
+{% endfor %}
+
+
 {% endblock %}
