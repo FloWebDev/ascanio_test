@@ -10,30 +10,52 @@
         <ul>
             {% for task in liste.tasks %}
             <li>
+                <div class="card-body text-center p-0 pt-1 pb-3">
+                    <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-up"></i></a>
+                    <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-down"></i></a>
+                    <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-left"></i></a>
+                    <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-right"></i></a>
+                </div>
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><b>{{ task.name }}</b></h5>
+                        <h5 class="card-title"><b>{{ task.name|capitalize }}</b></h5>
                         <h6 class="card-subtitle mb-2 text-{{ task.priority.color }}">{{ task.priority.name|capitalize }} - <span class="badge badge-pill badge-{{ task.priority.color }}">{{ task.zorder }}</span></h6>
                         <p class="card-text">{{ task.content }}</p>
-                        <button type="button" class="btn btn-primary text-dark p-0 px-1 mr-2" data-toggle="modal" data-target="#task{{ task.id }}">Modifier</button>
-                        <a href="{{ path('task_delete', {id: task.id}) }}" type="button" class="deleteBtn"><i class="fas fa-trash text-danger"></i></a>
+                        <button type="button" class="btn btn-primary text-light p-0 px-2 mr-2" data-toggle="modal" data-target="#task{{ task.id }}">Modifier</button>
+                        <span type="button" data-toggle="modal" data-target="#delete_task{{ task.id }}"><i class="fas fa-trash text-danger"></i></span>
                     </div>
                 </div>
             </li>
+
+            {# Création de la modal de suppression #}
+            {% include 'task/_delete_modal.html.twig' with {task: task} %}
+
             {% else %}
-            <li>Aucune tâche créée.</li>
+                <li>Aucune tâche créée.</li>
             {% endfor %}
         </ul>
-        <footer><i class="fas fa-plus-circle"></i> Ajouter</footer>
+        {# Gestion du bouton d'ajout d'une nouvelle tâche #}
+        <footer class="text-dark">
+            <button type="button" 
+                class="btn btn-success text-light p-0 px-2 mr-2 add_new_task_action" 
+                data-toggle="modal" 
+                data-target="#add_task" 
+                data-list-id="{{ liste.id }}">
+                <i class="fas fa-plus-circle"></i> Ajouter
+            </button>
+
+        </footer>
     </div>
     {% else %}
         <p>Aucune liste créée.</p>
     {% endfor %}
 </div>
-
+{#href="{{ path('task_delete', {id: task.id}) }}" #}
 {% for id, form in forms %}
-    {% include 'list/_modal.html.twig' with {form: form, id: id} %}
+    {% include 'task/_modal.html.twig' with {form: form, id: id} %}
 {% endfor %}
+{# Création de la modal de création #}
+{% include 'task/_add_modal.html.twig' with {form: newForm} %}
 
 
 {% endblock %}

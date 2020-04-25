@@ -16,14 +16,16 @@
                 <nav class="navbar app">Ascanio</nav>
                 <nav class="navbar board bg-dark">Trello</nav>
 
-                {# read and display all flash messages #}
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }} col-6 mx-auto mt-2" role="alert">
-                            {{ message }}
-                        </div>
+                <div id="main_alert_container">
+                    {# read and display all flash messages #}
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }} col-4 mx-auto mt-2" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
+                </div>
 
             {% block body %}
             {# Cotenu propre à chaque page #}

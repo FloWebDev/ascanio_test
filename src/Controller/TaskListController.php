@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use App\Repository\TaskListRepository;
@@ -34,9 +35,13 @@ class TaskListController extends AbstractController
             $forms[$task->getId()] = $form->createView();
         }
 
+        $newTaskForm = $this->createForm(TaskType::class, new Task());
+        $form->handleRequest($request);
+
         return $this->render('list/index.html.twig', [
             'listes' => $listes,
-            'forms' => $forms
+            'forms' => $forms,
+            'newForm' => $newTaskForm->createView()
         ]);
     }
 }

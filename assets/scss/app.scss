@@ -114,3 +114,8 @@ body {
 		}
 	}
 }
+
+#main_alert_container,
+.alert_modal_container {
+	min-height: 40px;
+}

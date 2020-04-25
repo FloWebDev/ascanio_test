@@ -12,6 +12,8 @@ import '../scss/app.scss';
 // import $ from 'jquery';
 
 var app = {
+    fadeOutDelay: 5000,
+
     init: function() {
         console.log('init');
 
@@ -22,6 +24,17 @@ var app = {
         document.querySelectorAll('.deleteBtn').forEach(btn => {
             btn.addEventListener('click', app.handleClickToDelete);
         });
+
+        app.fadeOutMainAlert();
+
+        document.querySelectorAll('.add_new_task_action').forEach(btn => {
+            btn.addEventListener('click', app.handleClickToAddTask);
+        });
+    },
+    fadeOutMainAlert: function() {
+        if ($('#main_alert_container .alert')) {
+            $('#main_alert_container .alert').fadeOut(app.fadeOutDelay);
+        }
     },
     handleTaskSubmit: function(e) {
         // On stoppe la soummission du formulaire
@@ -45,7 +58,7 @@ var app = {
                         $('#error_message_form_' + data.formId).append(message + '<br>');
                     });
                     $('#error_message_form_' + data.formId).show();
-                    $('#error_message_form_' + data.formId).fadeOut(7000);
+                    $('#error_message_form_' + data.formId).fadeOut(app.fadeOutDelay);
                 } else {
                     window.location.reload();
                 }
@@ -61,6 +74,10 @@ var app = {
         if (!confirm('Confirmez la suppression.')) {
             e.preventDefault();
         }
+    },
+    handleClickToAddTask: function(e) {
+        // Pré-sélection de l'option
+        document.querySelector('#add_task #task_task_list').value = e.target.dataset.listId;
     }
 };
 

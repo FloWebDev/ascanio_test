@@ -1,0 +1,24 @@
+<div class="modal fade" id="delete_task{{ task.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalTask" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-dark" id="exampleModalLabel">Suppression de la tâche</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <p class="text-dark p-3">
+          <b>Confirmez la suppression de la tâche.</b><br>
+          {{ task.name|capitalize }} - {{ task.tasklist.name|capitalize }}
+        </p>
+        
+
+
+        <div class="modal-footer">
+          <a href="{{ path('task_delete', {id: task.id}) }}" type="button" class="btn btn-danger">Confirmer</a>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>

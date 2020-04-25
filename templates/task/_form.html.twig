@@ -1,4 +1,12 @@
+
+{% if id is defined and id is not null %}
 {{ form_start(form, {'action': path('task_edit', {id: id}), 'attr': {'novalidate': 'novalidate', 'class': 'update_task_form'}}) }}
     {{ form_widget(form) }}
     <button type="submit" class="btn btn-info">Modifier</button>
 {{ form_end(form) }}
+{% else %}
+    {{ form_start(form, {'action': path('task_new'), 'attr': {'novalidate': 'novalidate', 'class': 'update_task_form'}}) }}
+    {{ form_widget(form) }}
+        <button type="submit" class="btn btn-info">Modifier</button>
+    {{ form_end(form) }}
+{% endif %}
