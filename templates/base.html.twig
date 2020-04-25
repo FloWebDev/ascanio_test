@@ -16,7 +16,14 @@
                 <nav class="navbar app">Ascanio</nav>
                 <nav class="navbar board bg-dark">Trello</nav>
 
-
+                {# read and display all flash messages #}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }} col-6 mx-auto mt-2" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
 
             {% block body %}
             {# Cotenu propre à chaque page #}
@@ -28,7 +35,6 @@
             <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
             {{ encore_entry_script_tags('app') }}
             {% block javascripts %}
-                {# ajouts éventuels qui pourront être écrasés #}      
             {% endblock %}
             </div>
         </div>

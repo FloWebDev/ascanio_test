@@ -73,7 +73,7 @@ class AppFixtures extends Fixture
             shuffle($taskLists);
             $task = new Task();
             $task->setName($faker->words(5, true));
-            $task->setZOrder(random_int(1, 15));
+            $task->setZOrder($i + 1);
             $task->setContent($faker->text(random_int(40, 200), true));
             $task->setTaskList($taskLists[0]);
             $task->setPriority($priorities[0]);

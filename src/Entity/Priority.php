@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use Format;
+use App\Util\Format;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;

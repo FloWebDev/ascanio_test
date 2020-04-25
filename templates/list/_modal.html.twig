@@ -7,6 +7,11 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+
+        <div class="alert alert-danger" role="alert" id="error_message_form_{{ id }}" style="display: none;">
+
+        </div>
+
         <div class="modal-body text-dark">
           {% include 'task/_form.html.twig' with {form: form, id: id} %}
         </div>

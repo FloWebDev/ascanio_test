@@ -5,10 +5,11 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/task")
@@ -59,36 +60,61 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="task_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="task_edit", methods={"POST"})
      */
-    public function edit(Request $request, Task $task): Response
+    public function edit($id, Task $task, Request $request): Response
     {
+        // is it an Ajax request?
+        $isAjax = $request->isXmlHttpRequest();
+
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('task_index');
+            if ($isAjax) {
+                return $this->json([
+                    'formId' => $id,
+                    'success' => true,
+                    'message' => array('Modifications effectuées')
+                ]);
+            } else {
+                return $this->redirectToRoute('list');
+            }
         }
 
-        return $this->render('task/edit.html.twig', [
-            'task' => $task,
-            'form' => $form->createView(),
-        ]);
+        // Récupération des erreurs du formulaire afin de pouvoir les afficher en JS
+        $errorList = array();
+        $errors = $form->getErrors(true);
+        foreach($errors as $error) {
+            $errorList[] = $error->getMessage();
+        }
+
+        if ($isAjax) {
+            return $this->json([
+                'formId' => $id,
+                'success' => false,
+                'message' => $errorList
+            ]);
+        } else {
+            return $this->redirectToRoute('list');
+        }
     }
 
     /**
-     * @Route("/{id}", name="task_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="task_delete", methods={"GET"})
      */
-    public function delete(Request $request, Task $task): Response
+    public function delete(Task $task): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($task);
-            $entityManager->flush();
-        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($task);
+        $entityManager->flush();
 
-        return $this->redirectToRoute('task_index');
+        $this->addFlash(
+            'success',
+            'Tâche supprimée.'
+        );
+        return $this->redirectToRoute('list');
     }
 }
