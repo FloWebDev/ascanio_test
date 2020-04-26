@@ -19,6 +19,42 @@ class TaskListRepository extends ServiceEntityRepository
         parent::__construct($registry, TaskList::class);
     }
 
+    /**
+     * Permet d'obtenir la liste qui précède le z_order donnée en paramètre
+     * 
+     * @return TaskList
+     */
+    public function getPreviousList($zOrder)
+    {
+        return $this->createQueryBuilder('tl')
+            ->andWhere('tl.z_order < :z_order')
+            ->setParameter('z_order', $zOrder)
+            ->orderBy('tl.z_order', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        ;
+    }
+
+    /**
+     * Permet d'obtenir la tâche qui précède le z_order donnée en paramètre
+     * 
+     * @param int $zOrder
+     * 
+     * @return TaskList
+     */
+    public function getNextList($zOrder)
+    {
+        return $this->createQueryBuilder('tl')
+            ->andWhere('tl.z_order > :z_order')
+            ->setParameter('z_order', $zOrder)
+            ->orderBy('tl.z_order', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        ;
+    }
+
     // /**
     //  * @return TaskList[] Returns an array of TaskList objects
     //  */

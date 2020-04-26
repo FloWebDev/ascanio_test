@@ -28,7 +28,7 @@ class Task
     private $z_order;
 
     /**
-     * @ORM\Column(type="string", length=256)
+     * @ORM\Column(type="string", length=1024)
      */
     private $content;
 

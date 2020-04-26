@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Entity\TaskList;
+use App\Repository\TaskListRepository;
 use App\Repository\TaskRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,7 +86,7 @@ class TaskController extends AbstractController
             $form->handleRequest($request);
         
             if ($form->isSubmitted() && $form->isValid()) {
-                $task->setCreatedAt(new \DateTime()); // On modifie la date de création (nécessaire pour l'ordre des tâches)
+                $task->setCreatedAt(new \DateTime()); // On modifie la date de création (nécessaire pour l'ordre des tâches et non visible par l'utilisateur)
                 $zOrder = !empty($task->getZOrder()) ? $task->getZOrder() : 1;
                 $task->setZOrder($zOrder);
 
@@ -187,22 +188,48 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Pour déplacer une tâche dans la liste se situant à sa droite
-     * 
-     * @Route("/{id}/right", name="task_right", methods={"GET"})
-     */
-    public function toRight(Task $task): Response
-    {
-        return $this->redirectToRoute('list');
-    }
-
-    /**
      * Pour déplacer une tâche dans la liste se situant à sa gauche
      * 
      * @Route("/{id}/left", name="task_left", methods={"GET"})
      */
-    public function toLeft(Task $task): Response
+    public function toLeft(Task $task, TaskListRepository $taskListRepo): Response
     {
+        $zOrderList = $task->getTaskList()->getZOrder();
+
+        $previousList = $taskListRepo->getPreviousList($zOrderList);
+
+        if (!is_null($previousList)) {
+            // On attribue à la tâche la liste suivante
+            $task->setCreatedAt(new \DateTime()); // Modification du created_at (non visible par l'utilisateur mais nécessaire pour avoir un ordre cohérent)
+            $task->setTaskList($previousList);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->cleanOrderTask();
+        }
+
+        return $this->redirectToRoute('list');
+    }
+
+    /**
+     * Pour déplacer une tâche dans la liste se situant à sa droite
+     * 
+     * @Route("/{id}/right", name="task_right", methods={"GET"})
+     */
+    public function toRight(Task $task, TaskListRepository $taskListRepo): Response
+    {
+        $zOrderList = $task->getTaskList()->getZOrder();
+
+        $nextList = $taskListRepo->getNextList($zOrderList);
+
+        if (!is_null($nextList)) {
+            // On attribue à la tâche la liste suivante
+            $task->setCreatedAt(new \DateTime()); // Modification du created_at (non visible par l'utilisateur mais nécessaire pour avoir un ordre cohérent)
+            $task->setTaskList($nextList);
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->cleanOrderTask();
+        }
+
         return $this->redirectToRoute('list');
     }
 

@@ -39,7 +39,7 @@ class TaskType extends AbstractType
             ])
             ->add('z_order', IntegerType::class, [
                 'label' => 'Ordre d\'affichage (min 1, max 50) (*)',
-                'help' => 'Si aucun ordre d\'affichage n\'est saisi, la taĉhe sera placée par défaut en début de liste.',
+                'help' => 'Si aucun ordre d\'affichage n\'est saisi, la tâche sera placée en début de liste (par défaut).',
                 'constraints' => [
                     // new NotBlank([
                     //     'message' => 'Ordre d\'affichage obligatoire.'
@@ -64,7 +64,7 @@ class TaskType extends AbstractType
                     ]),
                     new Length([
                         'min' => 2,
-                        'max' => 250,
+                        'max' => 1000,
                         'minMessage' => 'Minimum {{ limit }} caractères',
                         'maxMessage' => 'Maximum {{ limit }} caractères.'
                     ])
