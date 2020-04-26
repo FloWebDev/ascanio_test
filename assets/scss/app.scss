@@ -115,7 +115,18 @@ body {
 	}
 }
 
-#main_alert_container,
-.alert_modal_container {
-	min-height: 40px;
+#second_navbar {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-flow: nowrap row;
+
+	h1 {
+		width: 20%;
+		margin: 0;
+	}
+
+	div {
+		width: 80%;
+	}
 }

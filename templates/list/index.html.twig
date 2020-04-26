@@ -4,25 +4,33 @@
 
 {% block body %}
 <div class="lists mt-3">
-    {% for liste in listes %}
+    {% for list in lists %}
     <div class="list">
-        <header>{{ liste.name|capitalize }}</header>
+        <header>{{ list.name|capitalize }}</header>
         <ul>
-            {% for task in liste.tasks %}
+            {% for task in list.tasks %}
             <li>
-                <div class="card-body text-center p-0 pt-1 pb-3">
+                {# <div class="card-body text-center p-0 pt-1 pb-3">
                     <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-up"></i></a>
                     <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-down"></i></a>
                     <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-left"></i></a>
                     <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-right"></i></a>
-                </div>
+                </div> #}
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body pb-2">
                         <h5 class="card-title"><b>{{ task.name|capitalize }}</b></h5>
                         <h6 class="card-subtitle mb-2 text-{{ task.priority.color }}">{{ task.priority.name|capitalize }} - <span class="badge badge-pill badge-{{ task.priority.color }}">{{ task.zorder }}</span></h6>
-                        <p class="card-text">{{ task.content }}</p>
-                        <button type="button" class="btn btn-primary text-light p-0 px-2 mr-2" data-toggle="modal" data-target="#task{{ task.id }}">Modifier</button>
-                        <span type="button" data-toggle="modal" data-target="#delete_task{{ task.id }}"><i class="fas fa-trash text-danger"></i></span>
+                        <p class="card-text">{{ task.content|nl2br }}</p>
+                        <div class="text-center p-0 pb-2">
+                            <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-up"></i></a>
+                            <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-down"></i></a>
+                            <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-left"></i></a>
+                            <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary text-light p-0 px-2 mr-2" data-toggle="modal" data-target="#task{{ task.id }}">Modifier</button>
+                            <span type="button" data-toggle="modal" data-target="#delete_task{{ task.id }}" data-toggle="tooltip" data-placement="right" title="Supprimer"><i class="fas fa-trash text-danger"></i></span>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -40,7 +48,7 @@
                 class="btn btn-success text-light p-0 px-2 mr-2 add_new_task_action" 
                 data-toggle="modal" 
                 data-target="#add_task" 
-                data-list-id="{{ liste.id }}">
+                data-list-id="{{ list.id }}">
                 <i class="fas fa-plus-circle"></i> Ajouter
             </button>
 
@@ -50,9 +58,9 @@
         <p>Aucune liste créée.</p>
     {% endfor %}
 </div>
-{#href="{{ path('task_delete', {id: task.id}) }}" #}
-{% for id, form in forms %}
-    {% include 'task/_modal.html.twig' with {form: form, id: id} %}
+{% for id, form in editForms %}
+    {# Création des modals d'édition #}
+    {% include 'task/_edit_modal.html.twig' with {form: form, id: id} %}
 {% endfor %}
 {# Création de la modal de création #}
 {% include 'task/_add_modal.html.twig' with {form: newForm} %}

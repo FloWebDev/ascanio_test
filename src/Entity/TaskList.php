@@ -31,12 +31,19 @@ class TaskList
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="task_list")
-     * @ORM\OrderBy({"z_order" = "ASC", "name" = "ASC"})
+     * @ORM\OrderBy({"z_order" = "ASC", "created_at" = "DESC"})
      */
     private $tasks;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
     public function __construct()
     {
+        // Valeurs par défaut
+        $this->created_at = new \DateTime();
         $this->tasks = new ArrayCollection();
     }
 
@@ -79,6 +86,8 @@ class TaskList
      */
     public function getTasks(): Collection
     {
+        // Ordonnées par "z_order" et "created_at" de manière à avoir toujours les dernières tâches créées 
+        // en premières positions pour un même z_order
         return $this->tasks;
     }
 
@@ -101,6 +110,18 @@ class TaskList
                 $task->setTaskList(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

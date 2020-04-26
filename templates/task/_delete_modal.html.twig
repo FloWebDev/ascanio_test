@@ -8,16 +8,17 @@
           </button>
         </div>
 
-        <p class="text-dark p-3">
-          <b>Confirmez la suppression de la tâche.</b><br>
-          {{ task.name|capitalize }} - {{ task.tasklist.name|capitalize }}
-        </p>
+        <div class="text-dark p-3">
+          <h3>Confirmez la suppression de la tâche.</h3>
+          <h5>{{ task.tasklist.name|capitalize }}</h5>
+          <p>{{ task.name|capitalize }}</p>
+        </div>
         
 
 
         <div class="modal-footer">
           <a href="{{ path('task_delete', {id: task.id}) }}" type="button" class="btn btn-danger">Confirmer</a>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Annuler</button>
         </div>
       </div>
     </div>

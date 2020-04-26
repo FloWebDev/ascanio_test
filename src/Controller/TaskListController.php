@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Task;
 use App\Form\TaskType;
+use App\Entity\TaskList;
 use App\Repository\TaskRepository;
 use App\Repository\TaskListRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,30 +18,27 @@ class TaskListController extends AbstractController
      */
     public function index(TaskListRepository $taskListRepository, TaskRepository $taskRepository, Request $request)
     {
-        $listes = $taskListRepository->findBy([], [
+        $lists = $taskListRepository->findBy([], [
             'z_order' => 'ASC',
             'name' => 'ASC'
         ]);
 
-        $tasks = $taskRepository->findBy([], [
-            'z_order' => 'DESC',
-            'name' => 'ASC'
-        ]);
-
+        // Création des formulaires d'édition pour les différentes tâches
+        $tasks = $taskRepository->findAll();
         $forms = array();
-        foreach($tasks as $task) {
-            $form = $this->createForm(TaskType::class, $task);
-            $form->handleRequest($request);
-
-            $forms[$task->getId()] = $form->createView();
+        if (is_array($tasks) && !empty($tasks)) {
+            foreach($tasks as $task) {
+                $form = $this->createForm(TaskType::class, $task);
+                $forms[$task->getId()] = $form->createView();
+            }
         }
 
+        // Création du formulaire d'ajout
         $newTaskForm = $this->createForm(TaskType::class, new Task());
-        $form->handleRequest($request);
 
         return $this->render('list/index.html.twig', [
-            'listes' => $listes,
-            'forms' => $forms,
+            'lists' => $lists,
+            'editForms' => $forms,
             'newForm' => $newTaskForm->createView()
         ]);
     }

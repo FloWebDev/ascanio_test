@@ -17,6 +17,8 @@ var app = {
     init: function() {
         console.log('init');
 
+        document.querySelector('#new_task_form').addEventListener('submit', app.handleTaskSubmit)
+
         document.querySelectorAll('.update_task_form').forEach(form => {
             form.addEventListener('submit', app.handleTaskSubmit);
         });
@@ -52,13 +54,24 @@ var app = {
                 console.log(data);
                 console.log(data.success);
                 if(!data.success) {
-                    console.log(data.message[0]);
-                    $('#error_message_form_' + data.formId).empty();
-                    data.message.forEach(message => {
-                        $('#error_message_form_' + data.formId).append(message + '<br>');
-                    });
-                    $('#error_message_form_' + data.formId).show();
-                    $('#error_message_form_' + data.formId).fadeOut(app.fadeOutDelay);
+                    console.log(data.message);
+                    if (data.formId) {
+                        // Gestion affichage des erreurs des formulaires d'édition
+                        $('#error_message_form_' + data.formId).empty();
+                        data.message.forEach(message => {
+                            $('#error_message_form_' + data.formId).append(message + '<br>');
+                        });
+                        $('#error_message_form_' + data.formId).show();
+                        $('#error_message_form_' + data.formId).fadeOut(app.fadeOutDelay);
+                    } else {
+                        // Gestion affichage des erreurs du formulaires de création
+                        $('#error_message_form').empty();
+                        data.message.forEach(message => {
+                            $('#error_message_form').append(message + '<br>');
+                        });
+                        $('#error_message_form').show();
+                        $('#error_message_form').fadeOut(app.fadeOutDelay);
+                    }
                 } else {
                     window.location.reload();
                 }

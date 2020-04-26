@@ -8,14 +8,17 @@
           </button>
         </div>
 
+        {# Afifichage des messages d'erreurs du formulaire #}
         <div class="alert_modal_container">
           <div class="alert alert-danger p-1 m-0" role="alert" id="error_message_form_{{ id }}" style="display: none;">
           </div>
         </div>
 
+        {# Affichage du formulaire d'édition #}
         <div class="modal-body text-dark">
           {% include 'task/_form.html.twig' with {form: form, id: id} %}
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
         </div>

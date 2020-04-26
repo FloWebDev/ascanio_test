@@ -42,6 +42,17 @@ class Task
      */
     private $priority;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
+    public function __construct()
+    {
+        // Valeurs par défaut
+        $this->created_at = new \DateTime();
+    }
+
     public function __toString()
     {
         return Format::mb_ucfirst($this->name);
@@ -108,6 +119,18 @@ class Task
     public function setPriority(?Priority $priority): self
     {
         $this->priority = $priority;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
