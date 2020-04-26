@@ -79,8 +79,8 @@ class TaskType extends AbstractType
                     new Length([
                         'min' => 2,
                         'max' => 1000,
-                        'minMessage' => 'Minimum {{ limit }} caractères',
-                        'maxMessage' => 'Maximum {{ limit }} caractères.'
+                        'minMessage' => 'Détails trop courts. Minimum {{ limit }} caractères',
+                        'maxMessage' => 'Détails trop longs. Maximum {{ limit }} caractères.'
                     ])
                 ]
             ])

@@ -7,7 +7,7 @@
     {# Boucle des listes #}
     {% for indexList, list in lists %}
     <div class="list">
-        <header class="d-flex justify-content-between align-items-center"><span class="badge badge-secondary">{{ list.name|capitalize }}</span> <a href="{{ path('task_list_index') }}" class="btn btn-warning py-0 px-1" title="Gestion des listes"><i class="fas fa-cog"></i></a></header>
+        <header class="d-flex justify-content-between align-items-center"><span class="badge badge-secondary">{{ list.name|capitalize }} ({{ list.tasks|length }})</span> <a href="{{ path('task_list_index') }}" class="btn btn-warning py-0 px-1" title="Gestion des listes"><i class="fas fa-cog"></i></a></header>
         <ul>
             {# Boucle des tâches #}
             {% for task in list.tasks %}

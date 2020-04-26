@@ -40,7 +40,9 @@ Cloner le repository GitHub.
 
 `bin/console doc:mig:mig`
 
-Soit `bin/console init:data` pour générer les données initiales (= les priorités) nécessaires au bon fonctionnement de l'application, soit `bin/console doc:fix:load` pour la génération de la cinquantaine de fixtures demandées (donnés initiales incluses). **Ne pas générer les données initiales après les fixtures (inutile et risque de bug).**
+Soit `bin/console doc:fix:load` pour la génération de la cinquantaine de fixtures demandées. Soit `bin/console init:data` pour générer uniquement les données initiales (= les priorités) nécessaires au bon fonctionnement de l'application (sans les fixtures). **Ne pas générer les données initiales après les fixtures (inutile et risque de bug).**
+
+`yarn install`
 
 `yarn encore dev` ou `yarn encore production`
 

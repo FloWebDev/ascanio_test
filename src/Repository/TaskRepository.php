@@ -25,7 +25,7 @@ class TaskRepository extends ServiceEntityRepository
      * @param int $listId
      * @param int $zOrder
      * 
-     * @return Task - Retourne la tâche qui suit le z_order donnée en paramètre
+     * @return Task
      */
     public function getPreviousTask($listId, $zOrder)
     {

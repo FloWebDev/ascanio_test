@@ -12,7 +12,7 @@ import '../scss/app.scss';
 // import $ from 'jquery';
 
 var app = {
-    fadeOutDelay: 5000,
+    fadeOutDelay: 7000,
 
     init: function() {
         // Gestion de l'affichage du formulaire de création d'une nouvelle tâche
