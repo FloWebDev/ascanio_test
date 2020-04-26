@@ -197,6 +197,7 @@ class TaskController extends AbstractController
             $task->setTaskList($previousList);
             $this->getDoctrine()->getManager()->flush();
 
+            // Cleanage des z-order
             $this->cleanOrderTask();
         }
 
@@ -220,6 +221,7 @@ class TaskController extends AbstractController
             $task->setTaskList($nextList);
             $this->getDoctrine()->getManager()->flush();
 
+            // Cleanage des z-order
             $this->cleanOrderTask();
         }
 
