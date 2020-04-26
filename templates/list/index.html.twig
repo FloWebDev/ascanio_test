@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="lists mt-3">
-    {% for list in lists %}
+    {% for indexList, list in lists %}
     <div class="list">
         <header>{{ list.name|capitalize }}</header>
         <ul>
@@ -22,10 +22,18 @@
                         <h6 class="card-subtitle mb-2 text-{{ task.priority.color }}">{{ task.priority.name|capitalize }} - <span class="badge badge-pill badge-{{ task.priority.color }}">{{ task.zorder }}</span></h6>
                         <p class="card-text">{{ task.content|nl2br }}</p>
                         <div class="text-center p-0 pb-2">
-                            <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-up"></i></a>
-                            <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-down"></i></a>
-                            <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-left"></i></a>
-                            <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-right"></i></a>
+                            {% if not loop.first %}
+                                <a href="{{ path('task_up', {id: task.id}) }}" type="button" class="btn btn-dark text-light p-0 px-2" title="Déplacer en haut"><i class="fas fa-arrow-circle-up"></i></a>
+                            {% endif %}
+                            {% if not loop.last %}
+                                <a href="{{ path('task_down', {id: task.id}) }}" type="button" class="btn btn-dark text-light p-0 px-2" title="Déplacer en bas"><i class="fas fa-arrow-circle-down"></i></a>
+                            {% endif %}
+                            {% if indexList != 0 %}
+                                <a href="{{ path('task_left', {id: task.id}) }}" type="button" class="btn btn-dark text-light p-0 px-2" title="Déplacer à gauche"><i class="fas fa-arrow-circle-left"></i></a>
+                            {% endif %}
+                            {% if indexList != ((lists|length) - 1) %}
+                                <a href="{{ path('task_right', {id: task.id}) }}" type="button" class="btn btn-dark text-light p-0 px-2" title="Déplacer à droite"><i class="fas fa-arrow-circle-right"></i></a>
+                            {% endif %}
                         </div>
                         <div class="text-center">
                             <button type="button" class="btn btn-primary text-light p-0 px-2 mr-2" data-toggle="modal" data-target="#task{{ task.id }}">Modifier</button>

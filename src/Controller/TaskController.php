@@ -40,7 +40,8 @@ class TaskController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 // Par défaut, on place la nouvelle tâche créée en début de liste
                 // L'utilisateur pourra modifier l'ordre par la suite côté Front
-                $task->setZOrder(1);
+                $zOrder = !empty($task->getZOrder()) ? $task->getZOrder() : 1;
+                $task->setZOrder($zOrder);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($task);
                 $entityManager->flush();
@@ -84,7 +85,13 @@ class TaskController extends AbstractController
             $form->handleRequest($request);
         
             if ($form->isSubmitted() && $form->isValid()) {
+                $task->setCreatedAt(new \DateTime()); // On modifie la date de création (nécessaire pour l'ordre des tâches)
+                $zOrder = !empty($task->getZOrder()) ? $task->getZOrder() : 1;
+                $task->setZOrder($zOrder);
+
                 $this->getDoctrine()->getManager()->flush();
+
+                $this->cleanOrderTask();
 
                 $this->addFlash(
                     'success',
@@ -134,22 +141,54 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Pour monter l'ordre d'une tâche d'un cran
+     * 
      * @Route("/{id}/up", name="task_up", methods={"GET"})
      */
-    public function toUp(Task $task): Response
+    public function toUp(Task $task, TaskRepository $taskRepo): Response
     {
+        $listId = $task->getTaskList()->getId();
+        $zOrder = $task->getZOrder();
+
+        $previousTask = $taskRepo->getPreviousTask($listId, $zOrder);
+
+        if (!is_null($previousTask)) {
+            // On inverse le z_order entre la tâche déplacée
+            // et celle dont elle prend la place
+            $task->setZOrder($previousTask->getZOrder());
+            $previousTask->setZOrder($zOrder);
+            $this->getDoctrine()->getManager()->flush();
+        }
+
         return $this->redirectToRoute('list');
     }
 
     /**
+     * Pour descendre l'ordre d'une tâche d'un cran
+     * 
      * @Route("/{id}/down", name="task_down", methods={"GET"})
      */
-    public function toDown(Task $task): Response
+    public function toDown(Task $task, TaskRepository $taskRepo): Response
     {
+        $listId = $task->getTaskList()->getId();
+        $zOrder = $task->getZOrder();
+
+        $nextTask = $taskRepo->getNextTask($listId, $zOrder);
+
+        if (!is_null($nextTask)) {
+            // On inverse le z_order entre la tâche déplacée
+            // et celle dont elle prend la place
+            $task->setZOrder($nextTask->getZOrder());
+            $nextTask->setZOrder($zOrder);
+            $this->getDoctrine()->getManager()->flush();
+        }
+
         return $this->redirectToRoute('list');
     }
 
     /**
+     * Pour déplacer une tâche dans la liste se situant à sa droite
+     * 
      * @Route("/{id}/right", name="task_right", methods={"GET"})
      */
     public function toRight(Task $task): Response
@@ -158,6 +197,8 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Pour déplacer une tâche dans la liste se situant à sa gauche
+     * 
      * @Route("/{id}/left", name="task_left", methods={"GET"})
      */
     public function toLeft(Task $task): Response
@@ -183,7 +224,6 @@ class TaskController extends AbstractController
                     //
                     $task->setZOrder($rang + 1);
                     $this->getDoctrine()->getManager()->flush();
-
                 }
             }
         }
