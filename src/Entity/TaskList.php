@@ -6,9 +6,13 @@ use App\Util\Format;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TaskListRepository")
+ * @UniqueEntity("z_order", message="Cet ordre est déjà occupé par une autre liste."
+ * )
  */
 class TaskList
 {
@@ -74,7 +78,7 @@ class TaskList
         return $this->z_order;
     }
 
-    public function setZOrder(int $z_order): self
+    public function setZOrder(?int $z_order): self
     {
         $this->z_order = $z_order;
 

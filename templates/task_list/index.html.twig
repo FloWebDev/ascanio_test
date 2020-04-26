@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listes{% endblock %}
+
+{% block body %}
+    <div class="col-10 mx-auto">
+        <h2 class="mt-3">Listing</h2>
+        <table class="table bg-light text-dark my-3">
+            <thead>
+                <tr>
+                    <th>Libellé</th>
+                    <th>Nb. tâches</th>
+                    <th>Ordre d'affichage</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for task_list in task_lists %}
+                <tr>
+                    <td>{{ task_list.name|capitalize }}</td>
+                    <td>{{ task_list.tasks|length }}</td>
+                    <td>{{ task_list.zOrder }}</td>
+                    <td>
+                        <a href="{{ path('task_list_edit', {'id': task_list.id}) }}"><i class="fas fa-edit"></i> Modifier</a><br>
+                        <a href="#" data-toggle="modal" data-target="#delete_list_{{ task_list.id }}"><i class="fas fa-trash-alt"></i> Supprimer</a>
+                    </td>
+                </tr>
+            
+            {# Création des modals de suppression #}
+            {% include 'task_list/_delete_modal.html.twig' with {list: task_list} %}
+            {% else %}
+                <tr>
+                    <td colspan="5">Aucune liste trouvée</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ path('task_list_new') }}" class="btn btn-success">Créer une liste</a>
+        <a href="{{ path('home_page') }}" class="btn btn-secondary">Retour Trello</a>
+    </div>
+{% endblock %}

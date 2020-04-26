@@ -17,15 +17,17 @@ var app = {
     init: function() {
         console.log('init');
 
-        document.querySelector('#new_task_form').addEventListener('submit', app.handleTaskSubmit)
+        if (document.querySelector('#new_task_form')) {
+            document.querySelector('#new_task_form').addEventListener('submit', app.handleTaskSubmit);
+        }
 
         document.querySelectorAll('.update_task_form').forEach(form => {
             form.addEventListener('submit', app.handleTaskSubmit);
         });
 
-        document.querySelectorAll('.deleteBtn').forEach(btn => {
-            btn.addEventListener('click', app.handleClickToDelete);
-        });
+        // document.querySelectorAll('.deleteBtn').forEach(btn => {
+        //     btn.addEventListener('click', app.handleClickToDelete);
+        // });
 
         app.fadeOutMainAlert();
 
@@ -82,12 +84,12 @@ var app = {
             }
         });
     },
-    handleClickToDelete: function(e) {
-        console.log('handleDeleteClick');
-        if (!confirm('Confirmez la suppression.')) {
-            e.preventDefault();
-        }
-    },
+    // handleClickToDelete: function(e) {
+    //     console.log('handleDeleteClick');
+    //     if (!confirm('Confirmez la suppression.')) {
+    //         e.preventDefault();
+    //     }
+    // },
     handleClickToAddTask: function(e) {
         // Pré-sélection de l'option
         document.querySelector('#add_task #task_task_list').value = e.target.dataset.listId;

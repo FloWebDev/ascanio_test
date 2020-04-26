@@ -15,7 +15,7 @@
             <div class="ui">
                 <nav class="navbar app">Ascanio</nav>
                 <nav class="navbar board bg-dark pt-0" id="second_navbar">
-                    <h1>Trello</h1>
+                    <h1 class="pt-2"><a href="{{ path('home_page') }}">Trello</a></h1>
                     <div id="main_alert_container" class="m-0 p-0">
                         {# read and display all flash messages #}
                         {% for label, messages in app.flashes %}

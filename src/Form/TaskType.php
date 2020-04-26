@@ -5,8 +5,10 @@ namespace App\Form;
 use App\Entity\Task;
 use App\Entity\Priority;
 use App\Entity\TaskList;
+use Symfony\Component\Form\FormEvent;
 use App\Repository\PriorityRepository;
 use App\Repository\TaskListRepository;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -22,7 +24,37 @@ class TaskType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $listener = function (FormEvent $event) {
+            $form = $event->getForm();
+            $task = $event->getData();
+
+            if (!is_null($task->getId())) {
+                // Si ID, alors il s'agit d'une modification
+                $form->remove('task_list')
+                // ->remove('z_order')
+                ;
+            }
+
+
+        };
+
         $builder
+            ->add('task_list', EntityType::class, [
+                'label' => 'Liste d\'appartenance (*)',
+                'class' => TaskList::class,
+                'query_builder' => function (TaskListRepository $tlr) {
+                    return $tlr->createQueryBuilder('tl')
+                        ->orderBy('tl.z_order', 'ASC')
+                        ->addOrderBy('tl.name', 'ASC');
+                },
+                'expanded' => false,
+                'multiple' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez renseigner une liste associée.'
+                    ]),
+                ]
+            ])
             ->add('name', TextType::class, [
                 'label' => 'Intitulé (*)',
                 'constraints' => [
@@ -35,21 +67,6 @@ class TaskType extends AbstractType
                         'minMessage' => 'Libellé trop court. Minimum {{ limit }} caractères',
                         'maxMessage' => 'Libellé trop court. Maximum {{ limit }} caractères',
                     ]),
-                ]
-            ])
-            ->add('z_order', IntegerType::class, [
-                'label' => 'Ordre d\'affichage (min 1, max 50) (*)',
-                'help' => 'Si aucun ordre d\'affichage n\'est saisi, la tâche sera placée en début de liste (par défaut).',
-                'constraints' => [
-                    // new NotBlank([
-                    //     'message' => 'Ordre d\'affichage obligatoire.'
-                    // ]),
-                    new Range([
-                        'min' => 1,
-                        'max' => 200,
-                        'minMessage' => "L'ordre doit au moins être de {{ limit }}.",
-                        'maxMessage' => "L'ordre ne doit pas être supérieur à {{ limit }}."
-                    ])
                 ]
             ])
             ->add('content', TextareaType::class, [
@@ -70,20 +87,19 @@ class TaskType extends AbstractType
                     ])
                 ]
             ])
-            ->add('task_list', EntityType::class, [
-                'label' => 'Liste d\'appartenance (*)',
-                'class' => TaskList::class,
-                'query_builder' => function (TaskListRepository $tlr) {
-                    return $tlr->createQueryBuilder('tl')
-                        ->orderBy('tl.z_order', 'ASC')
-                        ->addOrderBy('tl.name', 'ASC');
-                },
-                'expanded' => false,
-                'multiple' => false,
+            ->add('z_order', IntegerType::class, [
+                'label' => 'Ordre d\'affichage',
+                'help' => 'Si aucun ordre d\'affichage n\'est saisi (min 1, max 200), la tâche sera placée en début de liste.',
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez renseigner une liste associée.'
-                    ]),
+                    // new NotBlank([
+                    //     'message' => 'Ordre d\'affichage obligatoire.'
+                    // ]),
+                    new Range([
+                        'min' => 1,
+                        'max' => 200,
+                        'minMessage' => "L'ordre doit au moins être de {{ limit }}.",
+                        'maxMessage' => "L'ordre ne doit pas être supérieur à {{ limit }}."
+                    ])
                 ]
             ])
             ->add('priority', EntityType::class, [
@@ -101,6 +117,7 @@ class TaskType extends AbstractType
                     ]),
                 ]
             ])
+            ->addEventListener(FormEvents::PRE_SET_DATA, $listener)
         ;
     }
 

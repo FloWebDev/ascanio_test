@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification{% endblock %}
+
+{% block body %}
+<div class="col-6 mx-auto">
+    <h2 class="mt-3">Modification</h2>
+
+    <div class="bg-light text-dark my-3 p-3">
+        {{ include('task_list/_form.html.twig') }}
+
+        <a href="{{ path('task_list_index') }}" >Retour au Listing</a>        
+    </div>
+</div>
+
+{% endblock %}

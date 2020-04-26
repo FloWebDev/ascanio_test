@@ -138,7 +138,7 @@ class TaskController extends AbstractController
             'Tâche supprimée.'
         );
 
-        return $this->redirectToRoute('list');
+        return $this->redirectToRoute('home_page');
     }
 
     /**
@@ -161,7 +161,7 @@ class TaskController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
         }
 
-        return $this->redirectToRoute('list');
+        return $this->redirectToRoute('home_page');
     }
 
     /**
@@ -184,7 +184,7 @@ class TaskController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
         }
 
-        return $this->redirectToRoute('list');
+        return $this->redirectToRoute('home_page');
     }
 
     /**
@@ -207,7 +207,7 @@ class TaskController extends AbstractController
             $this->cleanOrderTask();
         }
 
-        return $this->redirectToRoute('list');
+        return $this->redirectToRoute('home_page');
     }
 
     /**
@@ -230,7 +230,7 @@ class TaskController extends AbstractController
             $this->cleanOrderTask();
         }
 
-        return $this->redirectToRoute('list');
+        return $this->redirectToRoute('home_page');
     }
 
     /**
