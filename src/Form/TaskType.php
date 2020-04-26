@@ -31,11 +31,8 @@ class TaskType extends AbstractType
             if (!is_null($task->getId())) {
                 // Si ID, alors il s'agit d'une modification
                 $form->remove('task_list')
-                // ->remove('z_order')
                 ;
             }
-
-
         };
 
         $builder
@@ -65,7 +62,7 @@ class TaskType extends AbstractType
                         'min' => 2,
                         'max' => 60,
                         'minMessage' => 'Libellé trop court. Minimum {{ limit }} caractères',
-                        'maxMessage' => 'Libellé trop court. Maximum {{ limit }} caractères',
+                        'maxMessage' => 'Libellé trop long. Maximum {{ limit }} caractères',
                     ]),
                 ]
             ])
@@ -91,9 +88,6 @@ class TaskType extends AbstractType
                 'label' => 'Ordre d\'affichage',
                 'help' => 'Si aucun ordre d\'affichage n\'est saisi (min 1, max 200), la tâche sera placée en début de liste.',
                 'constraints' => [
-                    // new NotBlank([
-                    //     'message' => 'Ordre d\'affichage obligatoire.'
-                    // ]),
                     new Range([
                         'min' => 1,
                         'max' => 200,

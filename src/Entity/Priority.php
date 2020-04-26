@@ -30,7 +30,7 @@ class Priority
     private $z_rank;
 
     /**
-     * @ORM\Column(type="string", length=16, nullable=true)
+     * @ORM\Column(type="string", length=16)
      */
     private $color;
 

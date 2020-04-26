@@ -17,6 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TaskListController extends AbstractController
 {
     /**
+     * Page centrale de l'application
+     * 
      * @Route("/", name="home_page")
      */
     public function index(TaskListRepository $taskListRepository, TaskRepository $taskRepository, Request $request)
@@ -46,7 +48,7 @@ class TaskListController extends AbstractController
     }
 
     /**
-     * @Route("/listes", name="task_list_index", methods={"GET"})
+     * @Route("/lists", name="task_list_index", methods={"GET"})
      */
     public function getAll(TaskListRepository $taskListRepository): Response
     {
@@ -71,6 +73,7 @@ class TaskListController extends AbstractController
             $entityManager->persist($taskList);
             $entityManager->flush();
 
+            // Message Flash
             $this->addFlash(
                 'success',
                 'Liste créée.'
@@ -96,6 +99,7 @@ class TaskListController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            // Message Flash
             $this->addFlash(
                 'success',
                 'Liste modifiée.'
@@ -126,6 +130,7 @@ class TaskListController extends AbstractController
         $em->remove($taskList);
         $em->flush();
 
+        // Message Flash
         $this->addFlash(
             'success',
             'Liste supprimée (avec toutes ses tâches associées).'

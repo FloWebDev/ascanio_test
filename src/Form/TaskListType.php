@@ -27,7 +27,7 @@ class TaskListType extends AbstractType
                         'min' => 2,
                         'max' => 30,
                         'minMessage' => 'Libellé trop court. Minimum {{ limit }} caractères',
-                        'maxMessage' => 'Libellé trop court. Maximum {{ limit }} caractères',
+                        'maxMessage' => 'Libellé trop long. Maximum {{ limit }} caractères',
                     ]),
                 ]
             ])

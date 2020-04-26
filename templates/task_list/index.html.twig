@@ -28,14 +28,16 @@
             
             {# Création des modals de suppression #}
             {% include 'task_list/_delete_modal.html.twig' with {list: task_list} %}
+    
             {% else %}
+            {# Si aucune liste créée #}
                 <tr>
-                    <td colspan="5">Aucune liste trouvée</td>
+                    <td colspan="5">Aucune liste créée</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
         <a href="{{ path('task_list_new') }}" class="btn btn-success">Créer une liste</a>
-        <a href="{{ path('home_page') }}" class="btn btn-secondary">Retour Trello</a>
+        <a href="{{ path('home_page') }}" class="btn btn-warning">Retour Trello</a>
     </div>
 {% endblock %}

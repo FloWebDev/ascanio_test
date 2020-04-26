@@ -19,8 +19,10 @@ class AppFixtures extends Fixture
         $this->prioRepo = $prioRepo;
         $this->taskListRepo = $taskListRepo;
     }
+
     public function load(ObjectManager $manager)
     {
+        // Tableau des couleurs pour les priorités
         $colors = [
             array('faible', 'warning'),
             array('normal', 'info'),
@@ -74,7 +76,7 @@ class AppFixtures extends Fixture
             $task = new Task();
             $task->setName($faker->words(5, true));
             $task->setZOrder($i + 1);
-            $task->setContent($faker->text(random_int(40, 200), true));
+            $task->setContent($faker->text(random_int(40, 300), true));
             $task->setTaskList($taskLists[0]);
             $task->setPriority($priorities[0]);
             $manager->persist($task);

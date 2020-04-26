@@ -18,16 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TaskController extends AbstractController
 {
     /**
-     * @Route("/", name="task_index", methods={"GET"})
-     */
-    public function index(TaskRepository $taskRepository): Response
-    {
-        return $this->render('task/index.html.twig', [
-            'tasks' => $taskRepository->findAll(),
-        ]);
-    }
-
-    /**
      * @Route("/new", name="task_new", methods={"POST"})
      */
     public function new(Request $request): Response
@@ -39,7 +29,7 @@ class TaskController extends AbstractController
             $form->handleRequest($request);
         
             if ($form->isSubmitted() && $form->isValid()) {
-                // Par défaut, on place la nouvelle tâche créée en début de liste
+                // Par défaut, si l'utilisateur ne précise pas d'ordre, on place la nouvelle tâche créée en début de liste
                 // L'utilisateur pourra modifier l'ordre par la suite côté Front
                 $zOrder = !empty($task->getZOrder()) ? $task->getZOrder() : 1;
                 $task->setZOrder($zOrder);
@@ -50,6 +40,7 @@ class TaskController extends AbstractController
                 // Cleanage des z-order
                 $this->cleanOrderTask();
     
+                // Message Flash
                 $this->addFlash(
                     'success',
                     'Tâche ajoutée.'
@@ -89,11 +80,12 @@ class TaskController extends AbstractController
                 $task->setCreatedAt(new \DateTime()); // On modifie la date de création (nécessaire pour l'ordre des tâches et non visible par l'utilisateur)
                 $zOrder = !empty($task->getZOrder()) ? $task->getZOrder() : 1;
                 $task->setZOrder($zOrder);
-
                 $this->getDoctrine()->getManager()->flush();
 
+                // Cleanage des z-order
                 $this->cleanOrderTask();
 
+                // Message Flash
                 $this->addFlash(
                     'success',
                     'Tâche modifiée.'
@@ -133,6 +125,7 @@ class TaskController extends AbstractController
         // Cleanage des z-order
         $this->cleanOrderTask();
 
+        // Message Flash
         $this->addFlash(
             'success',
             'Tâche supprimée.'
@@ -237,7 +230,8 @@ class TaskController extends AbstractController
      * Permet d'ordonner et réactualiser le z_order des tâches pour éviter
      * que plusieurs tâches aient le même z_order 
      * sans pour autant ajouter de constraint d'unicité sur ce champ dans l'entity
-     * (car pourrait avoir des effets de bord bloquant pour la suite des évolutions)
+     * (car pourrait avoir des effets de bord bloquants pour la suite des évolutions)
+     * 
      */
     private function cleanOrderTask() {
         // Récupération de toutes les listes
@@ -245,10 +239,10 @@ class TaskController extends AbstractController
         if (is_array($lists) && !empty($lists)) {
             foreach($lists as $list) {
                 // Pour chaque liste, récupération de toutes les tâches
-                // dans un ordre défini dans la propriété Tasks de l'entité TaskList
+                // dans un ordre défini dans la propriété "tasks" de l'entité TaskList
                 $tasks = $list->getTasks();
                 foreach($tasks as $rang => $task) {
-                    //
+                    // On réassocie les z_order en fonction des positions
                     $task->setZOrder($rang + 1);
                     $this->getDoctrine()->getManager()->flush();
                 }

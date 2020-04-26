@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Ascanio{% endblock %}</title>
+        <link rel="shortcut icon" href="{{ asset('assets/favicon.ico') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
         {{ encore_entry_link_tags('app') }}
         <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.min.css') }}">
@@ -29,13 +30,14 @@
                 </nav>
 
             {% block body %}
-            {# Cotenu propre à chaque page #}
+                {# Contenu propre à chaque page #}
             {% endblock %}
 
             <script src="{{ asset('assets/jquery/jquery.min.js') }}"></script>
             <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
             {{ encore_entry_script_tags('app') }}
             {% block javascripts %}
+                {# ajouts éventuels qui pourront être écrasés #}
             {% endblock %}
             </div>
         </div>

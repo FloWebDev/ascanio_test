@@ -4,18 +4,14 @@
 
 {% block body %}
 <div class="lists mt-3">
+    {# Boucle des listes #}
     {% for indexList, list in lists %}
     <div class="list">
         <header class="d-flex justify-content-between align-items-center"><span>{{ list.name|capitalize }}</span> <a href="{{ path('task_list_index') }}" class="btn btn-primary py-0 px-1" title="Gestion des listes"><i class="fas fa-cog"></i></a></header>
         <ul>
+            {# Boucle des tâches #}
             {% for task in list.tasks %}
             <li>
-                {# <div class="card-body text-center p-0 pt-1 pb-3">
-                    <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-up"></i></a>
-                    <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-down"></i></a>
-                    <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-left"></i></a>
-                    <a href="{{ path('list') }}" type="button" class="btn btn-dark text-light p-0 px-2"><i class="fas fa-arrow-circle-right"></i></a>
-                </div> #}
                 <div class="card">
                     <div class="card-body pb-2">
                         <h5 class="card-title"><b>{{ task.name|capitalize }}</b></h5>
@@ -43,10 +39,12 @@
                 </div>
             </li>
 
-            {# Création de la modal de suppression #}
+            {# Création de la modal de suppression
+                associée à la tâche #}
             {% include 'task/_delete_modal.html.twig' with {task: task} %}
 
             {% else %}
+            {# Si aucune tâche créée #}
                 <li>Aucune tâche créée.</li>
             {% endfor %}
         </ul>
@@ -56,28 +54,24 @@
                 class="btn btn-success text-light p-0 px-2 mr-2 add_new_task_action" 
                 data-toggle="modal" 
                 data-target="#add_task" 
-                data-list-id="{{ list.id }}">
+                data-list-id="{{ list.id }}"> {# Ce dataset permettra de pré-sélectionner la liste d'appartenance dans le formulaire de création #}
                 <i class="fas fa-plus-circle"></i> Ajouter
             </button>
 
         </footer>
     </div>
     {% else %}
+    {# Si aucune liste créée #}
         <p>Aucune liste créée.<br><a href="{{ path('task_list_new') }}" class="text-light font-weight-bold">Créer une liste</a></p>
     {% endfor %}
 </div>
+
+{# Création des modals d'édition #}
 {% for id, form in editForms %}
-    {# Création des modals d'édition #}
     {% include 'task/_edit_modal.html.twig' with {form: form, id: id} %}
 {% endfor %}
 {# Création de la modal de création #}
 {% include 'task/_add_modal.html.twig' with {form: newForm} %}
 
 
-{% endblock %}
-
-
-
-{% block javascripts %}
-    {# <script src="{{ asset('') }}"></script> #}
 {% endblock %}
