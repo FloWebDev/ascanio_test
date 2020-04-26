@@ -69,17 +69,18 @@ class AppFixtures extends Fixture
         // Instance Faker
         $faker = \Faker\Factory::create('fr_FR');
 
-        // Création des tâches
-        for($i = 0; $i < 50; $i++) {
-            shuffle($priorities);
-            shuffle($taskLists);
-            $task = new Task();
-            $task->setName($faker->words(5, true));
-            $task->setZOrder($i + 1);
-            $task->setContent($faker->text(random_int(40, 300), true));
-            $task->setTaskList($taskLists[0]);
-            $task->setPriority($priorities[0]);
-            $manager->persist($task);
+        // Création des 50 tâches
+        foreach ($taskLists as $index => $list) {
+            for($i = 0; $i < 17; $i++) {
+                shuffle($priorities);
+                $task = new Task();
+                $task->setName($faker->words(5, true));
+                $task->setZOrder($i + 1);
+                $task->setContent($faker->text(random_int(40, 300), true));
+                $task->setTaskList($list);
+                $task->setPriority($priorities[0]);
+                $manager->persist($task);
+            }
         }
 
         $manager->flush();
