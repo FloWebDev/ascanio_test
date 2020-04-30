@@ -262,9 +262,10 @@ class TaskController extends AbstractController
                 foreach($tasks as $rang => $task) {
                     // On réassocie les z_order en fonction des positions
                     $task->setZOrder($rang + 1);
-                    $this->getDoctrine()->getManager()->flush();
                 }
             }
+            // UN SEUL FLUSH pour l'ensemble des modifications apportées
+            $this->getDoctrine()->getManager()->flush();
         }
     }
 }

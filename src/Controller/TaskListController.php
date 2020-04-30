@@ -104,14 +104,8 @@ class TaskListController extends AbstractController
      */
     public function delete(TaskList $taskList, EntityManagerInterface $em): Response
     {
-        // On récupère et supprimer toutes les tâches associées à la liste
-        $tasks = $taskList->getTasks();
-        foreach($tasks as $task) {
-            $em->remove($task);
-            $em->flush();
-        }
-
-        // Puis on supprime la liste
+        // On supprime la liste
+        // le "orphanRemoval" inscrit dans l'entité TaskList aura pour effet de supprimer les enfants isolés de la liste concernée
         $em->remove($taskList);
         $em->flush();
 

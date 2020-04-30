@@ -34,7 +34,7 @@ class TaskList
     private $z_order;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="task_list")
+     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="task_list", orphanRemoval=true)
      * @ORM\OrderBy({"z_order" = "ASC", "created_at" = "DESC"})
      */
     private $tasks;

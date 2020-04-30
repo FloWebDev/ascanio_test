@@ -16,7 +16,9 @@ var app = {
     init: function() {
         // Mise en place de MutationObserver qui permettra de sélectionner des éléments APRES chargement du DOM
         // (lors des changements dynamiques du DOM)
-        app.observer();
+        if (document.querySelector('#content_task_form')) {
+            app.observer();
+        }
 
         // Affichage dynamique du formulaire de création des tâches
         document.querySelectorAll('.add_task_action').forEach(btn => {
