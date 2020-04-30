@@ -4,7 +4,8 @@
 Dans le cadre de son développement, un client nous a demandé de créer un outil pour qu’il puisse
 s’organiser dans ses tâches. Il nous a donc sollicité pour créer cet outil.
 
-## Objectifs :
+## Objectifs 
+
 1. Créer un outil type Trello (avec trois colonnes: A faire, En cours, Fini) permettant d’ajouter des tâches avec les fonctionnalités suivantes :
     1. Nom de la tâche **=> OK**
     2. Priorité (de 1 à 5) (qui donnera un badge côté front d’une couleur lié à l’importance (ex rouge = 5) **=> OK**
