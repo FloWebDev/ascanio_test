@@ -16,7 +16,7 @@ s’organiser dans ses tâches. Il nous a donc sollicité pour créer cet outil.
 6. Faire des fixtures pour créer une 50aine de tâches dispersées dans les colonnes aléatoirement **=> OK**
 7. Pouvoir ajouter des colonnes supplémentaires par l’utilisateur **=> OK**
 
-## Règles
+## Règles
 
 Pas de requète SQL (Juste fonction native de Doctrine et DQL). **=> OK**
 

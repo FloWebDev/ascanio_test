@@ -1,4 +1,4 @@
-<div class="modal fade" id="delete_task{{ task.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalTask" aria-hidden="true">
+<div class="modal fade" id="delete_task" tabindex="-1" role="dialog" aria-labelledby="deleteModalTask" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,16 +8,14 @@
           </button>
         </div>
 
-        <div class="text-dark p-3">
+        <div class="text-dark p-3" id="content_delete_task">
           <h3>Confirmez la suppression de la tâche.</h3>
-          <h5>{{ task.tasklist.name|capitalize }}</h5>
-          <p>{{ task.name|capitalize }}</p>
+          <h5>{# Affichage en JS #}</h5>
+          <p>{# Affichage en JS #}</p>
         </div>
-        
-
 
         <div class="modal-footer">
-          <a href="{{ path('task_delete', {id: task.id}) }}" type="button" class="btn btn-danger">Confirmer</a>
+          <a id="task_delete_link" href="#" type="button" class="btn btn-danger">Confirmer</a>
           <button type="button" class="btn btn-primary" data-dismiss="modal">Annuler</button>
         </div>
       </div>

@@ -1,12 +1,4 @@
-
-{% if id is defined and id is not null %}
-{{ form_start(form, {'action': path('task_edit', {id: id}), 'attr': {'novalidate': 'novalidate', 'class': 'update_task_form'}}) }}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
-    <button type="submit" class="btn btn-info">Modifier</button>
+    <button type="submit" class="btn btn-info">Valider</button>
 {{ form_end(form) }}
-{% else %}
-    {{ form_start(form, {'action': path('task_new'), 'attr': {'novalidate': 'novalidate', 'id': 'new_task_form'}}) }}
-    {{ form_widget(form) }}
-        <button type="submit" class="btn btn-info">Ajouter</button>
-    {{ form_end(form) }}
-{% endif %}

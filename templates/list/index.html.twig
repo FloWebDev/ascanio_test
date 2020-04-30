@@ -32,16 +32,12 @@
                             {% endif %}
                         </div>
                         <div class="text-center">
-                            <button type="button" class="btn btn-primary text-light p-0 px-2 mr-2" data-toggle="modal" data-target="#task{{ task.id }}">Modifier</button>
-                            <span type="button" data-toggle="modal" data-target="#delete_task{{ task.id }}" data-toggle="tooltip" data-placement="right" title="Supprimer"><i class="fas fa-trash text-danger"></i></span>
+                            <button type="button" class="btn btn-primary text-light p-0 px-2 mr-2 update_task_action" data-toggle="modal" data-target="#task" data-task-url="{{ path('task_edit', {id: task.id}) }}">Modifier</button>
+                            <span type="button" data-toggle="modal" data-target="#delete_task" data-toggle="tooltip" data-placement="right" title="Supprimer" data-task-delete-url="{{ path('task_delete', {id: task.id}) }}" data-task-name="{{ task.name }}" data-task-list="{{ task.taskList.name }}" class="delete_task_action"><i class="fas fa-trash text-danger"></i></span>
                         </div>
                     </div>
                 </div>
             </li>
-
-            {# Création de la modal de suppression
-                associée à la tâche #}
-            {% include 'task/_delete_modal.html.twig' with {task: task} %}
 
             {% else %}
             {# Si aucune tâche créée #}
@@ -51,9 +47,10 @@
         {# Gestion du bouton d'ajout d'une nouvelle tâche #}
         <footer class="text-dark">
             <button type="button" 
-                class="btn btn-success text-light p-0 px-2 mr-2 add_new_task_action" 
+                class="btn btn-success text-light p-0 px-2 mr-2 add_task_action" 
                 data-toggle="modal" 
-                data-target="#add_task" 
+                data-target="#task" 
+                data-task-url="{{ path('task_new') }}"
                 data-list-id="{{ list.id }}"> {# Ce dataset permettra de pré-sélectionner la liste d'appartenance dans le formulaire de création #}
                 <i class="fas fa-plus-circle"></i> Ajouter
             </button>
@@ -66,12 +63,10 @@
     {% endfor %}
 </div>
 
-{# Création des modals d'édition #}
-{% for id, form in editForms %}
-    {% include 'task/_edit_modal.html.twig' with {form: form, id: id} %}
-{% endfor %}
-{# Création de la modal de création #}
-{% include 'task/_add_modal.html.twig' with {form: newForm} %}
+{# Inclusion des modals
+    le contenu est chargé dynamiquement #}
+{% include 'task/_form_modal.html.twig' %}
+{% include 'task/_delete_modal.html.twig' %}
 
 
 {% endblock %}

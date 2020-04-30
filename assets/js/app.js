@@ -13,31 +13,85 @@ import '../scss/app.scss';
 
 var app = {
     fadeOutDelay: 7000,
-
     init: function() {
-        // Gestion de l'affichage du formulaire de création d'une nouvelle tâche
-        document.querySelectorAll('.add_new_task_action').forEach(btn => {
-            btn.addEventListener('click', app.handleClickToAddTask);
+        // Mise en place de MutationObserver qui permettra de sélectionner des éléments APRES chargement du DOM
+        // (lors des changements dynamiques du DOM)
+        app.observer();
+
+        // Affichage dynamique du formulaire de création des tâches
+        document.querySelectorAll('.add_task_action').forEach(btn => {
+            btn.addEventListener('click', app.handleClickToDisplayTaskForm);
         });
 
-        // Ecouteur sur la soumission du formulaire de création d'une nouvelle tâche
-        if (document.querySelector('#new_task_form')) {
-            document.querySelector('#new_task_form').addEventListener('submit', app.handleTaskSubmit);
-        }
+        // Affichage dynamique du formulaire d'édition d'une tâche
+        document.querySelectorAll('.update_task_action').forEach(btn => {
+            btn.addEventListener('click', app.handleClickToDisplayTaskForm);
+        });
 
-        // Ecouteurs sur les formulaires d'édition des tâches
-        document.querySelectorAll('.update_task_form').forEach(form => {
-            form.addEventListener('submit', app.handleTaskSubmit);
+        // Affichage de la modal associée à la suppression d'une tâche
+        document.querySelectorAll('.delete_task_action').forEach(btn => {
+            btn.addEventListener('click', app.handleClickToDeleteTask);
         });
 
         // Gestion des messages flash (lorsque visibles)
         app.fadeOutMainAlert();
+    },
+    observer: function() {
+        // @link https://developer.mozilla.org/fr/docs/Web/API/MutationObserver
+        // Selectionne le noeud dont les mutations seront observées
+        var targetNode = document.querySelector('#content_task_form');
+
+        // Options de l'observateur (quelles sont les mutations à observer)
+        var config = { attributes: true, childList: true,subtree: true };
+
+        // Créé une instance de l'observateur lié à la fonction de callback
+        var observer = new MutationObserver((mutationsList) => {
+            // Fonction callback à éxécuter quand une mutation est observée
+            for(var mutation of mutationsList) {
+                if (mutation.type == 'childList') {
+                    // Si le formulaire des tâches est inséré dans le DOM, on y pose un écouteur sur l'event "submit"
+                    if (document.querySelector('#dynamic_task_form')) {
+                        document.querySelector('#dynamic_task_form').addEventListener('submit', app.handleTaskSubmit);
+                    }
+                }
+            }
+        });
+
+        // Commence à observer le noeud cible pour les mutations précédemment configurées
+        observer.observe(targetNode, config);
     },
     fadeOutMainAlert: function() {
         // Disparition progressive des messages flash
         if ($('#main_alert_container .alert')) {
             $('#main_alert_container .alert').fadeOut(app.fadeOutDelay);
         }
+    },
+    handleClickToDisplayTaskForm: function(e) {
+        var taskUrlController = e.target.dataset.taskUrl;
+
+        $.ajax({
+            type: 'POST',
+            url: taskUrlController,
+            data: {},
+            dataType: "json",
+            success: function(data)
+            {
+                if (data.form) {
+                    // On ajoute la view du formulaire à la DIV prévue à cet effet
+                    document.querySelector('#content_task_form').innerHTML = data.form;
+
+                    // Si dataset data-list-id, alors il s'agit d'un formulaire de création d'une tâche
+                    // On pré-sélectionne dans ce cas la liste d'appartenance
+                    if (e.target.dataset.listId) {
+                        document.querySelector('#task #task_task_list').value = e.target.dataset.listId;
+                    }
+                }
+            },
+            fail: function(e) {
+                console.log('Erreur Serveur');
+                console.log(e);
+            }
+        });
     },
     handleTaskSubmit: function(e) {
         // On stoppe la soummission du formulaire
@@ -54,24 +108,13 @@ var app = {
             success: function(data)
             {
                 if(!data.success) {
-                    // En cas d'échec
-                    if (data.formId) {
-                        // Gestion affichage des erreurs des formulaires d'édition
-                        $('#error_message_form_' + data.formId).empty();
-                        data.message.forEach(message => {
-                            $('#error_message_form_' + data.formId).append(message + '<br>');
-                        });
-                        $('#error_message_form_' + data.formId).show();
-                        $('#error_message_form_' + data.formId).fadeOut(app.fadeOutDelay);
-                    } else {
-                        // Gestion affichage des erreurs du formulaires de création
-                        $('#error_message_form').empty();
-                        data.message.forEach(message => {
-                            $('#error_message_form').append(message + '<br>');
-                        });
-                        $('#error_message_form').show();
-                        $('#error_message_form').fadeOut(app.fadeOutDelay);
-                    }
+                    // En cas d'erreur dans la soumission du formulaire
+                    $('#error_message_form').empty();
+                    data.message.forEach(message => {
+                        $('#error_message_form').append(message + '<br>');
+                    });
+                    $('#error_message_form').show();
+                    $('#error_message_form').fadeOut(app.fadeOutDelay);
                 } else {
                     // En cas de succès
                     window.location.reload();
@@ -83,9 +126,10 @@ var app = {
             }
         });
     },
-    handleClickToAddTask: function(e) {
-        // Pré-sélection de l'option dans le formulaire de création d'une nouvelle tâche
-        document.querySelector('#add_task #task_task_list').value = e.target.dataset.listId;
+    handleClickToDeleteTask: function(e) {
+        document.querySelector('#content_delete_task h5').textContent = e.currentTarget.dataset.taskList;
+        document.querySelector('#content_delete_task p').textContent = e.currentTarget.dataset.taskName;
+        document.querySelector('#task_delete_link').href = e.currentTarget.dataset.taskDeleteUrl;
     }
 };
 

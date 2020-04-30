@@ -25,7 +25,13 @@ class TaskController extends AbstractController
         // is it an Ajax request ?
         if ($request->isXmlHttpRequest()) {
             $task = new Task();
-            $form = $this->createForm(TaskType::class, $task);
+            $form = $this->createForm(TaskType::class, $task, [
+                'action' => $this->generateUrl('task_new'),
+                'attr' => [
+                    'id' => 'dynamic_task_form',
+                ]
+            ]);
+
             $form->handleRequest($request);
         
             if ($form->isSubmitted() && $form->isValid()) {
@@ -60,7 +66,9 @@ class TaskController extends AbstractController
         
                 return $this->json([
                     'success' => false,
-                    'message' => $errorList
+                    'message' => $errorList,
+                    // 'form' => $this->render('task/_form.html.twig', ['form' => $form->createView()])->getContent()
+                    'form' => $this->renderView('task/_form.html.twig', ['form' => $form->createView()])
                 ]);
             }
         }
@@ -73,7 +81,13 @@ class TaskController extends AbstractController
     {
         // is it an Ajax request ?
         if ($request->isXmlHttpRequest()) {
-            $form = $this->createForm(TaskType::class, $task);
+            $form = $this->createForm(TaskType::class, $task, [
+                'action' => $this->generateUrl('task_edit', ['id' => $id]),
+                'attr' => [
+                    'id' => 'dynamic_task_form',
+                ]
+            ]);
+
             $form->handleRequest($request);
         
             if ($form->isSubmitted() && $form->isValid()) {
@@ -107,7 +121,9 @@ class TaskController extends AbstractController
                 return $this->json([
                     'formId' => $id,
                     'success' => false,
-                    'message' => $errorList
+                    'message' => $errorList,
+                    // 'form' => $this->render('task/_form.html.twig', ['form' => $form->createView()])->getContent()
+                    'form' => $this->renderView('task/_form.html.twig', ['form' => $form->createView()])
                 ]);
             }
         }

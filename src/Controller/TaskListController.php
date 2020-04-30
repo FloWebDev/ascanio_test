@@ -27,23 +27,8 @@ class TaskListController extends AbstractController
             'z_order' => 'ASC'
         ]);
 
-        // Création des formulaires d'édition pour les différentes tâches
-        $tasks = $taskRepository->findAll();
-        $forms = array();
-        if (is_array($tasks) && !empty($tasks)) {
-            foreach($tasks as $task) {
-                $form = $this->createForm(TaskType::class, $task);
-                $forms[$task->getId()] = $form->createView();
-            }
-        }
-
-        // Création du formulaire d'ajout
-        $newTaskForm = $this->createForm(TaskType::class, new Task());
-
         return $this->render('list/index.html.twig', [
-            'lists' => $lists,
-            'editForms' => $forms,
-            'newForm' => $newTaskForm->createView()
+            'lists' => $lists
         ]);
     }
 
