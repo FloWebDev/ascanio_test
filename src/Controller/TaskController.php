@@ -57,16 +57,9 @@ class TaskController extends AbstractController
                     'message' => array('Ajout effectué')
                 ]);
             } else {
-                // Récupération des erreurs du formulaire afin de pouvoir les afficher en JS
-                $errorList = array();
-                $errors = $form->getErrors(true);
-                foreach($errors as $error) {
-                    $errorList[] = $error->getMessage();
-                }
         
                 return $this->json([
                     'success' => false,
-                    'message' => $errorList,
                     // 'form' => $this->render('task/_form.html.twig', ['form' => $form->createView()])->getContent()
                     'form' => $this->renderView('task/_form.html.twig', ['form' => $form->createView()])
                 ]);
@@ -111,17 +104,10 @@ class TaskController extends AbstractController
                     'message' => array('Modifications effectuées')
                 ]);
             } else {
-                // Récupération des erreurs du formulaire afin de pouvoir les afficher en JS
-                $errorList = array();
-                $errors = $form->getErrors(true);
-                foreach($errors as $error) {
-                    $errorList[] = $error->getMessage();
-                }
         
                 return $this->json([
                     'formId' => $id,
                     'success' => false,
-                    'message' => $errorList,
                     // 'form' => $this->render('task/_form.html.twig', ['form' => $form->createView()])->getContent()
                     'form' => $this->renderView('task/_form.html.twig', ['form' => $form->createView()])
                 ]);

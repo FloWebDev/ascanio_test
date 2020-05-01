@@ -111,12 +111,10 @@ var app = {
             {
                 if(!data.success) {
                     // En cas d'erreur dans la soumission du formulaire
-                    $('#error_message_form').empty();
-                    data.message.forEach(message => {
-                        $('#error_message_form').append(message + '<br>');
-                    });
-                    $('#error_message_form').show();
-                    $('#error_message_form').fadeOut(app.fadeOutDelay);
+                    if (data.form) {
+                        // On réaffiche la view du formulaire contenant les messages d'erreurs
+                        document.querySelector('#content_task_form').innerHTML = data.form;
+                    }
                 } else {
                     // En cas de succès
                     window.location.reload();
