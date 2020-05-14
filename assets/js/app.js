@@ -104,7 +104,6 @@ var app = {
         $.ajax({
             type: 'POST',
             url: e.target.getAttribute('action'),
-            headers: {"name": "editclientvalidation"},
             data: $form.serialize(),
             dataType:"json",
             success: function(data)
